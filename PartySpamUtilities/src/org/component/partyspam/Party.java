@@ -1,5 +1,6 @@
 package org.component.partyspam;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
@@ -19,35 +20,36 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 public class Party {
-	private static final String TITLE = "title";
-	private static final String LOCATION = "location";
-	private static final String IMAGE = "image";
-	private static final String ATTENDEES = "nr_of_attendees";
-	private static final String START_HOUR = "startHour";
-	private static final String END_HOUR = "endHour";
-	private static final String END_DATE = "endDate";
-	private static final String START_DATE = "startDate";
-	private static final String USER_ID = "userId";
-	private static final String CONTACT_DATA = "contactData";
-	private static final String DESCRIPTION = "description";
+	public static final String TITLE = "title";
+	public static final String LOCATION = "location";
+	public static final String IMAGE = "image";
+	public static final String ATTENDEES = "nr_of_attendees";
+	public static final String START_HOUR = "startHour";
+	public static final String END_HOUR = "endHour";
+	public static final String END_DATE = "endDate";
+	public static final String START_DATE = "startDate";
+	public static final String USER_ID = "userId";
+	public static final String CONTACT_DATA = "contactData";
+	public static final String DESCRIPTION = "description";
 	private ArrayList<String> mPartyInfosName = new ArrayList<String>();
 	private ArrayList<String> mPartyInfosValue = new ArrayList<String>();
 	private DocumentBuilderFactory mDbfac = null;
 	private DocumentBuilder mDocBuilder = null;
 
-	private final int POS_TITLE = 0;
-	private final int POS_DESCRIPTION = POS_TITLE + 1;
-	private final int POS_CONTACT_DATA = POS_DESCRIPTION + 1;
-	private final int POS_USER_ID = POS_CONTACT_DATA + 1;
-	private final int POS_NR_OF_ATTENDEES = POS_USER_ID + 1;
-	private final int POS_START_DATE = POS_NR_OF_ATTENDEES + 1;
-	private final int POS_END_DATE = POS_START_DATE + 1;
-	private final int POS_START_HOUR = POS_END_DATE + 1;
-	private final int POS_END_HOUR = POS_START_HOUR + 1;
-	private final int POS_LOCATION = POS_END_HOUR + 1;
-	private final int POS_IMAGE = POS_LOCATION + 1;
+	public static final int POS_TITLE = 0;
+	public static final int POS_DESCRIPTION = POS_TITLE + 1;
+	public static final int POS_CONTACT_DATA = POS_DESCRIPTION + 1;
+	public static final int POS_USER_ID = POS_CONTACT_DATA + 1;
+	public static final int POS_NR_OF_ATTENDEES = POS_USER_ID + 1;
+	public static final int POS_START_DATE = POS_NR_OF_ATTENDEES + 1;
+	public static final int POS_END_DATE = POS_START_DATE + 1;
+	public static final int POS_START_HOUR = POS_END_DATE + 1;
+	public static final int POS_END_HOUR = POS_START_HOUR + 1;
+	public static final int POS_LOCATION = POS_END_HOUR + 1;
+	public static final int POS_IMAGE = POS_LOCATION + 1;
 	/**
 	 * 
 	 * @param iTitle
@@ -75,6 +77,9 @@ public class Party {
 		mPartyInfosName.add(POS_USER_ID, USER_ID);
 		mPartyInfosValue.add(POS_USER_ID, iUserId);
 
+		mPartyInfosName.add(POS_NR_OF_ATTENDEES, ATTENDEES);
+		mPartyInfosValue.add(POS_NR_OF_ATTENDEES, String.valueOf(iAttendees));
+		
 		mPartyInfosName.add(POS_START_DATE, START_DATE);
 		mPartyInfosValue.add(POS_START_DATE, iStartDate);
 
@@ -92,19 +97,16 @@ public class Party {
 
 		mPartyInfosName.add(POS_IMAGE, IMAGE);
 		mPartyInfosValue.add(POS_IMAGE, iImage);
-
-		mPartyInfosName.add(POS_NR_OF_ATTENDEES, ATTENDEES);
-		mPartyInfosValue.add(POS_NR_OF_ATTENDEES, String.valueOf(iAttendees));
-
 	}
 
-	public Party(String iXmlContent) {
+	public Party(String iXmlContent) throws org.xml.sax.SAXParseException,SAXException,IOException {
 		initialize();
 
 		try {
 			InputSource lIs = new InputSource();
 			lIs.setCharacterStream(new StringReader(iXmlContent));
 
+			//it the xml is not valid a org.xml.sax.SAXParseException will be thrown
 			Document lXmlDoc = mDocBuilder.parse(lIs);
 
 			Node lRoot = lXmlDoc.getFirstChild();
@@ -124,8 +126,15 @@ public class Party {
 				}
 
 			}
-		} catch (Exception e) {
+		} catch (org.xml.sax.SAXParseException e) {
 			System.out.println("XML -> data error");
+			e.printStackTrace();
+			throw e;
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
