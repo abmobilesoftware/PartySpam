@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" 
+    android:padding="6dip">
+
+    <EditText
+        android:id="@+id/newEventTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/defaultEventTitle" >
+
+        <requestFocus />
+    </EditText>
+    <EditText
+        android:id="@+id/newEventDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newEventTitle"
+        android:hint="@string/defaultEventDescription"
+        android:inputType="textMultiLine"
+        android:lines="5"
+        android:singleLine="false" />
+     <EditText
+        android:id="@+id/newEventContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/newEventDescription"
+        android:hint="@string/defaultEventContact"
+        android:inputType="textMultiLine"
+        android:lines="3"
+        android:singleLine="false" />
+
+</RelativeLayout>

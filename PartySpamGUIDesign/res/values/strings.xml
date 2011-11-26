@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, PartySpam2Activity!</string>
+    <string name="app_name">PartySpamGUI</string>
+    <string name="Events">Events</string>
+    <string name="MyEvents">My Events</string>
+    <string name="RefreshEvents">Refresh Events</string>
+    <string name="CreateEvent">Create Event</string>
+    <string name="ScanOptions">ScanOptions</string>
+    <string name="Settings">Settings</string>
+    <string name="defaultEventTitle">Enter event title</string>
+    <string name="defaultEventDescription">Enter event description</string>
+    <string name="defaultEventContact">Enter contact details: e.g. ion.vasile@gmail.com, 0745645213</string>
+    <string name="defaultEventAdditionalData">Enter data that will help people find your party: e.g. bl 3, ap 13</string>
+    <string name="new_fragment">Bogus</string>
+    <string name="hello_world">Hello World</string>
+    <string name="partySpam">Party Spam</string>
+    <string name="actionPrevious">Previous</string>
+    <string name="actionNext">Next</string>
+    <string name="actionFinish">Finish</string>
+    <string name="startDate">Start Date</string>
+    <string name="endDate">End Date</string>
+    <string name="startTime">Start Time</string>
+    <string name="endTime">End Time</string>
+    <string name="setImage">Select party image</string>
+    <string name="selectLocation">Select party location</string>
+    <string name="selectRadius">Select party radius (in meters)</string>
+
+</resources>
