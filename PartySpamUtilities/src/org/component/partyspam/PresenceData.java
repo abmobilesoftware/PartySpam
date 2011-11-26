@@ -20,23 +20,23 @@ import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
 public class PresenceData {
-	private static final String PHONE = "phone";
+	private static final String PHONE_ID = "phone";
 	private static final String LOCATION = "location";
 	private ArrayList<String> mPartyInfosName = new ArrayList<String>();
 	private ArrayList<String> mPartyInfosValue = new ArrayList<String>();
 	private DocumentBuilderFactory mDbfac = null;
     private DocumentBuilder mDocBuilder = null;
 	private final int LOCATION_POS = 0;
-	private final int PHONE_POS = LOCATION_POS + 1;
+	private final int PHONE_ID_POS = LOCATION_POS + 1;
 	
-	public PresenceData(LocationInfo iLocation, String iPhone) {
+	public PresenceData(LocationInfo iLocation, String iPhoneId) {
 		initialize();
 				
 		mPartyInfosName.add(LOCATION_POS,LOCATION);
 		mPartyInfosValue.add(LOCATION_POS,iLocation.toXML());
 		
-		mPartyInfosName.add(PHONE_POS,PHONE);
-		mPartyInfosValue.add(PHONE_POS,iPhone);		
+		mPartyInfosName.add(PHONE_ID_POS,PHONE_ID);
+		mPartyInfosValue.add(PHONE_ID_POS,iPhoneId);		
 	}
 	
 	public PresenceData(String iXmlContent) {
@@ -130,16 +130,16 @@ public class PresenceData {
 		mPartyInfosValue.add(LOCATION_POS, iLocation.toXML());
 	}
 	
-	public String getPhone() {
+	public String getPhoneId() {
 		try {
-			return mPartyInfosValue.get(PHONE_POS);
+			return mPartyInfosValue.get(PHONE_ID_POS);
 		}catch (IndexOutOfBoundsException e) {
 			return "noPhone";
 		}
 	}
 	
-	public void setPhone(String iPhone) {
-		mPartyInfosName.add(PHONE_POS, PHONE);
-		mPartyInfosValue.add(PHONE_POS, iPhone);
+	public void setPhoneId(String iPhoneId) {
+		mPartyInfosName.add(PHONE_ID_POS, PHONE_ID);
+		mPartyInfosValue.add(PHONE_ID_POS, iPhoneId);
 	}
 }

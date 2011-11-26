@@ -6,5 +6,6 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="D:/Work/PartySpam/modifiedaSmack.jar"/>
 	<classpathentry kind="lib" path="D:/Work/PartySpam/PartySpamUtilities.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/ModifiedActionbarSherlock.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

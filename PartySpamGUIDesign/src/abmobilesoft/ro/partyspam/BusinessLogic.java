@@ -81,10 +81,11 @@ public class BusinessLogic implements PacketListener {
 		if (iEvent != null && !iEvent.isEmpty())
 		{
 			LocationInfo lQueryLocationInfo = new LocationInfo(20.12, 41.42, 1000, "");
-			Party lNewParty = new Party(iEvent, "07524987",
-					"mihai@mihai.com", "2011", "2012", "15", "20",
-					lQueryLocationInfo);
+			Party lNewParty = new Party("Title: " + iEvent, iEvent, "07524987", 
+					"mihai@mihai.com", 0, "2011", "2012", 15, 20,
+					lQueryLocationInfo, "no image");
 			mCon.sendMessage("New Party", lNewParty.toXML(), Message.Type.createEvent);		
+			
 		}
 	}
 	

@@ -168,11 +168,11 @@ public class LocationInfo {
 		mPartyInfosValue.add(RADIUS_POS, String.valueOf(iRadius));
 	}
 
-	public int getAdditionalLocationData() {
+	public String getAdditionalLocationData() {
 		try {
-			return Integer.parseInt(mPartyInfosValue.get(ADDITIONAL_DATA_POS));
+			return mPartyInfosValue.get(ADDITIONAL_DATA_POS);
 		}catch (IndexOutOfBoundsException e) {
-			return Integer.MIN_VALUE;
+			return null;
 		}
 	}
 	
