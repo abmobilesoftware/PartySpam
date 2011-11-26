@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v7.0">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.web"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/merge/commons-logging.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/merge/dom4j.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/merge/jaxen.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/merge/jetty.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/merge/jstl.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/merge/stringprep.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/merge/xpp3.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/dist/hsqldb.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/dist/mysql.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/dist/postgres.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/lib/dist/servlet.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/build/ant-contrib.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/whack_src_1_0_0/whack.jar"/>
+	<classpathentry kind="lib" path="D:/Work/PartySpam/PartySpamUtilities.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
