@@ -1,8 +1,12 @@
 package abmobilesoft.ro.partyspam.Views;
 
+import java.io.IOException;
+
 import org.component.partyspam.MessageProcessing;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import abmobilesoft.ro.partyspam.Views.CreateNewEvent.CreateEventActivity;
 import android.content.Intent;
@@ -47,8 +51,19 @@ public class MyEventsActivity extends FragmentActivity {
 				if (lMessage.getType() == Message.Type.createEvent) {
 					// TODO - fix this later as right now it is here just as
 					// proof of concept
-					addPartyToList(MessageProcessing
-							.buildEventFromMessageBody(lMessage));		
+					try {
+						addPartyToList(MessageProcessing
+								.buildEventFromMessageBody(lMessage));
+					} catch (SAXParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SAXException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}		
 				}
 			}
 		}

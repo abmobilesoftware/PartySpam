@@ -1,8 +1,12 @@
 package abmobilesoft.ro.partyspam.Views;
 
+import java.io.IOException;
+
 import org.component.partyspam.MessageProcessing;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -44,8 +48,19 @@ public class EventsActivity extends FragmentActivity {
 				
 					this.getActivity().runOnUiThread(new Runnable() {
 						public void run() {
-							addPartyToList(MessageProcessing
-									.buildEventFromMessageBody(lMessage));
+							try {
+								addPartyToList(MessageProcessing
+										.buildEventFromMessageBody(lMessage));
+							} catch (SAXParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (SAXException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							setListShown(true);
 						}
 						});
