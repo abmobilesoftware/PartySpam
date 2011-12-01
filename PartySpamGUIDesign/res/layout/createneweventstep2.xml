@@ -104,7 +104,7 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/bntSelectStartDate"
+            android:id="@+id/btnSelectStartDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -112,7 +112,7 @@
         </Button>
 
         <Button
-            android:id="@+id/bntSelectStartTime"
+            android:id="@+id/btnSelectStartTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
@@ -148,7 +148,7 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/bntSelectEndDate"
+            android:id="@+id/btnSelectEndDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -156,7 +156,7 @@
         </Button>
 
         <Button
-            android:id="@+id/bntSelectEndTime"
+            android:id="@+id/btnSelectEndTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"

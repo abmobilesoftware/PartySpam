@@ -1,6 +1,11 @@
 package abmobilesoft.ro.partyspam.Views.CreateNewEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.component.partyspam.Party;
 
 import abmobilesoft.ro.partyspam.BusinessLogic;
 import abmobilesoft.ro.partyspam.R;
@@ -53,12 +58,12 @@ public class CreateEventActivity extends FragmentActivity {
 		}
 
 	}
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putInt("index", getSupportActionBar()
-				.getSelectedNavigationIndex());
-	}
+//	@Override
+//	protected void onSaveInstanceState(Bundle outState) {
+//		super.onSaveInstanceState(outState);
+//		outState.putInt("index", getSupportActionBar()
+//				.getSelectedNavigationIndex());
+//	}
 
 	public static class MyAdapter extends FragmentStatePagerAdapter {
 		public MyAdapter(FragmentManager fm) {
@@ -130,17 +135,28 @@ public class CreateEventActivity extends FragmentActivity {
 			mCreateEventBtn.setOnClickListener(new View.OnClickListener() {
 				public void onClick(View v) {
 					if (mCurrentTabID == LAST_TAB_ID) {
-						createNewEventBasedOnWizardData();
+						//we force the save on all steps
+						
+						for (int i=0;i<NUM_STEPS;++i)
+						{
+							ICreateEventWizardStep lFragment =(ICreateEventWizardStep) getItem(i);
+							lFragment.saveEventData();
+						}
+						createNewEventBasedOnWizardData();						
 					}
 				}
 			});
 		}
 
 		private void createNewEventBasedOnWizardData() {
+			
+			
 			NewEventDataRepository lNewEventRepository = NewEventDataRepository
 					.getInstance();;
 			BusinessLogic lBl = BusinessLogic.getInstance();
-			lBl.createEvent(lNewEventRepository.getEventTitle());
+			Party lNewParty = lNewEventRepository.getParty();
+			lBl.createEvent(lNewParty.getTitle());
+			
 			FragmentActivity lParentActivity = (FragmentActivity) mContext;
 			lParentActivity.setResult(RESULT_OK);
 			lParentActivity.finish();
@@ -161,11 +177,23 @@ public class CreateEventActivity extends FragmentActivity {
 			return mTabs.size();
 		}
 
+		Map<Integer,Fragment> mFragmentList =new HashMap<Integer,Fragment>();
 		@Override
 		public Fragment getItem(int position) {
+			//we need to keep a reference to our wizard steps
 			TabInfo info = mTabs.get(position);
-			return Fragment.instantiate(mContext, info.clss.getName(),
-					info.args);
+			if (mFragmentList.containsKey(position))
+			{
+				return mFragmentList.get(position);				
+			}
+			else
+			{
+				Fragment lFragment = Fragment.instantiate(mContext, info.clss.getName(),
+						info.args);
+				mFragmentList.put(position, lFragment);
+				return lFragment;	
+			}
+			
 		}
 
 		@Override
@@ -179,6 +207,8 @@ public class CreateEventActivity extends FragmentActivity {
 			}
 			int position = mTabHost.getCurrentTab();
 			mViewPager.setCurrentItem(position);
+			
+			
 		}
 
 		@Override

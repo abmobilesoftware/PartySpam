@@ -1,210 +1,22 @@
 package abmobilesoft.ro.partyspam.Views.CreateNewEvent;
 
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
-import android.graphics.Bitmap;
-import android.text.format.Time;
+import org.component.partyspam.LocationInfo;
+import org.component.partyspam.Party;
+import org.jivesoftware.smack.PacketListener;
+
+import abmobilesoft.ro.partyspam.BusinessLogic;
 
 public class NewEventDataRepository {
+	private static final String DATE_FORMAT = "dd/MM/yyyy";
+
 	private static NewEventDataRepository mEventData = null;
 
-	private String mEventName;
-	private String mEventDescription;
-	private Date mStartDate;
-	private Date mEndDate;
-	private Time mStartHour;
-	private Time mEndHour;
-	private String mContact;
-	private Bitmap mImage;
-	private int mRadius;
-	private double mLongitude;
-	private double mLatitude;
-	private String mLocationAdditionalInformation;
+	private Party mPartyToCreate;	
 	
-	/**
-	 * @return the mEventName
-	 */
-	public String getEventName() {
-		return mEventName;
-	}
-
-	/**
-	 * @param mEventName the mEventName to set
-	 */
-	public void setEventName(String mEventName) {
-		this.mEventName = mEventName;
-	}
-
-	/**
-	 * @return the mEventDescription
-	 */
-	public String getEventDescription() {
-		return mEventDescription;
-	}
-
-	/**
-	 * @param mEventDescription the mEventDescription to set
-	 */
-	public void setEventDescription(String mEventDescription) {
-		this.mEventDescription = mEventDescription;
-	}
-
-	/**
-	 * @return the mStartDate
-	 */
-	public Date getStartDate() {
-		return mStartDate;
-	}
-
-	/**
-	 * @param mStartDate the mStartDate to set
-	 */
-	public void setStartDate(Date mStartDate) {
-		this.mStartDate = mStartDate;
-	}
-
-	/**
-	 * @return the mEndDate
-	 */
-	public Date getEndDate() {
-		return mEndDate;
-	}
-
-	/**
-	 * @param mEndDate the mEndDate to set
-	 */
-	public void setEndDate(Date mEndDate) {
-		this.mEndDate = mEndDate;
-	}
-
-	/**
-	 * @return the mStartHour
-	 */
-	public Time getStartHour() {
-		return mStartHour;
-	}
-
-	/**
-	 * @param mStartHour the mStartHour to set
-	 */
-	public void setStartHour(Time mStartHour) {
-		this.mStartHour = mStartHour;
-	}
-
-	/**
-	 * @return the mEndHour
-	 */
-	public Time getEndHour() {
-		return mEndHour;
-	}
-
-	/**
-	 * @param mEndHour the mEndHour to set
-	 */
-	public void setEndHour(Time mEndHour) {
-		this.mEndHour = mEndHour;
-	}
-
-	/**
-	 * @return the mContact
-	 */
-	public String getContact() {
-		return mContact;
-	}
-
-	/**
-	 * @param mContact the mContact to set
-	 */
-	public void setContact(String mContact) {
-		this.mContact = mContact;
-	}
-
-	/**
-	 * @return the mImage
-	 */
-	public Bitmap getImage() {
-		return mImage;
-	}
-
-	/**
-	 * @param mImage the mImage to set
-	 */
-	public void setImage(Bitmap mImage) {
-		this.mImage = mImage;
-	}
-
-	/**
-	 * @return the mRadius
-	 */
-	public int getRadius() {
-		return mRadius;
-	}
-
-	/**
-	 * @param mRadius the mRadius to set
-	 */
-	public void setRadius(int mRadius) {
-		this.mRadius = mRadius;
-	}
-
-	/**
-	 * @return the mLongitude
-	 */
-	public double getLongitude() {
-		return mLongitude;
-	}
-
-	/**
-	 * @param mLongitude the mLongitude to set
-	 */
-	public void setLongitude(double mLongitude) {
-		this.mLongitude = mLongitude;
-	}
-
-	/**
-	 * @return the mLatitude
-	 */
-	public double getLatitude() {
-		return mLatitude;
-	}
-
-	/**
-	 * @param mLatitude the mLatitude to set
-	 */
-	public void setLatitude(double mLatitude) {
-		this.mLatitude = mLatitude;
-	}
-
-	/**
-	 * @return the mLocationAdditionalInformation
-	 */
-	public String getLocationAdditionalInformation() {
-		return mLocationAdditionalInformation;
-	}
-
-	/**
-	 * @param mLocationAdditionalInformation the mLocationAdditionalInformation to set
-	 */
-	public void setLocationAdditionalInformation(
-			String mLocationAdditionalInformation) {
-		this.mLocationAdditionalInformation = mLocationAdditionalInformation;
-	}
-
-	/**
-	 * @return the eventName
-	 */
-	public String getEventTitle() {
-		return mEventName;
-	}
-
-	/**
-	 * @param eventName
-	 *            the eventName to set
-	 */
-	public void setEventTitle(String eventName) {
-		mEventName = eventName;
-	}
-
 	private NewEventDataRepository() {
 
 	}
@@ -218,6 +30,53 @@ public class NewEventDataRepository {
 	}
 
 	public void clearEventData() {
-		mEventName = null;
+		mPartyToCreate = null;
+	}
+	
+	public Party getParty()
+	{
+		if (mPartyToCreate == null)
+		{
+			int lDefaultPartyID = 1;
+			String lDefaultEventTitle = "";
+			String lDefaultEventDescription = "";
+			String lDefaultContactDetails = "";
+			BusinessLogic lBl = BusinessLogic.getInstance((PacketListener)null);
+			String lUserId = lBl.getInstallationUniqueID();
+			int lInitialNrOfAttendees = 1;//since you create a party, this party has 1 attendee = you
+			Date lCurrentDate = new Date();
+			SimpleDateFormat lDateFormatter=  new SimpleDateFormat(DATE_FORMAT);
+			String lInitialStartDate = lDateFormatter.format(lCurrentDate);
+			String lInitialEndDate = getDateForTomorrow();
+			//TODO handle the case when the event is created between 23:00 and 24:00
+			int lInitialStartTime = 2300;
+			int lInitialEndTime = 300;
+			LocationInfo lInitialLocationInfo = lBl.getCurrentLocation();
+			String lInitialPartyImage = "NoImage";
+			double lDefaultModifiedDate = 100000.1234;
+			mPartyToCreate = new Party( lDefaultPartyID,
+										lDefaultEventTitle,
+										lDefaultEventDescription,
+										lDefaultContactDetails,
+										lUserId,
+										lInitialNrOfAttendees,
+										lInitialStartDate,
+										lInitialEndDate,
+										lInitialStartTime,
+										lInitialEndTime,
+										lInitialLocationInfo,
+										lInitialPartyImage,
+										lDefaultModifiedDate);
+		
+		}
+		return mPartyToCreate;
+	}	
+	
+	private String getDateForTomorrow()
+	{
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat lDateFormatter=  new SimpleDateFormat(DATE_FORMAT);	
+		  calendar.add(Calendar.DATE, 1);
+		  return lDateFormatter.format(calendar.getTime());
 	}
 }
