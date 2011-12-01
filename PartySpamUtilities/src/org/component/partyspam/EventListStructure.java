@@ -127,8 +127,8 @@ public class EventListStructure {
 	}
 	
 	public void setPartyId(String iPartyId) {
-		mPartyInfosName.add(PARTY_ID_POS, PARTY_ID);
-		mPartyInfosValue.add(PARTY_ID_POS, iPartyId);
+		mPartyInfosName.set(PARTY_ID_POS, PARTY_ID);
+		mPartyInfosValue.set(PARTY_ID_POS, iPartyId);
 	}
 	
 	public String getPhoneId() {
@@ -140,7 +140,7 @@ public class EventListStructure {
 	}
 	
 	public void setPhoneId(String iPhoneId) {
-		mPartyInfosName.add(PHONE_ID_POS, PHONE_ID);
-		mPartyInfosValue.add(PHONE_ID_POS, iPhoneId);
+		mPartyInfosName.set(PHONE_ID_POS, PHONE_ID);
+		mPartyInfosValue.set(PHONE_ID_POS, iPhoneId);
 	}
 }

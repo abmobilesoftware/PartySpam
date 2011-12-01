@@ -23,6 +23,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class Party {
+	public static final String ID = "id";
 	public static final String TITLE = "title";
 	public static final String LOCATION = "location";
 	public static final String IMAGE = "image";
@@ -34,12 +35,14 @@ public class Party {
 	public static final String USER_ID = "userId";
 	public static final String CONTACT_DATA = "contactData";
 	public static final String DESCRIPTION = "description";
+	public static final String MODIFIED_DATE = "modified_date";
 	private ArrayList<String> mPartyInfosName = new ArrayList<String>();
 	private ArrayList<String> mPartyInfosValue = new ArrayList<String>();
 	private DocumentBuilderFactory mDbfac = null;
 	private DocumentBuilder mDocBuilder = null;
 
-	public static final int POS_TITLE = 0;
+	public static final int POS_ID = 0;
+	public static final int POS_TITLE = POS_ID + 1;
 	public static final int POS_DESCRIPTION = POS_TITLE + 1;
 	public static final int POS_CONTACT_DATA = POS_DESCRIPTION + 1;
 	public static final int POS_USER_ID = POS_CONTACT_DATA + 1;
@@ -50,6 +53,7 @@ public class Party {
 	public static final int POS_END_HOUR = POS_START_HOUR + 1;
 	public static final int POS_LOCATION = POS_END_HOUR + 1;
 	public static final int POS_IMAGE = POS_LOCATION + 1;
+	public static final int POS_MODIFIED_DATE = POS_IMAGE + 1;
 	/**
 	 * 
 	 * @param iTitle
@@ -60,11 +64,14 @@ public class Party {
 	 * @param iEndDate
 	 * @param iStartHour: the format is 1545 = 15:45            
 	 */
-	public Party(String iTitle, String iDescription, String iContactData,
+	public Party(int iId,String iTitle, String iDescription, String iContactData,
 			String iUserId, int iAttendees, String iStartDate, String iEndDate, int iStartHour,
-			int iEndHour, LocationInfo iLocation, String iImage) {
+			int iEndHour, LocationInfo iLocation, String iImage,double iModifiedDate) {
 		initialize();
 
+		mPartyInfosName.add(POS_ID, ID);
+		mPartyInfosValue.add(POS_ID, String.valueOf(iId));
+		
 		mPartyInfosName.add(POS_TITLE, TITLE);
 		mPartyInfosValue.add(POS_TITLE, iTitle);
 
@@ -97,6 +104,9 @@ public class Party {
 
 		mPartyInfosName.add(POS_IMAGE, IMAGE);
 		mPartyInfosValue.add(POS_IMAGE, iImage);
+		
+		mPartyInfosName.add(POS_MODIFIED_DATE, MODIFIED_DATE);
+		mPartyInfosValue.add(POS_MODIFIED_DATE, String.valueOf(iModifiedDate));
 	}
 
 	public Party(String iXmlContent) throws org.xml.sax.SAXParseException,SAXException,IOException {
@@ -186,6 +196,19 @@ public class Party {
 
 	/* Getters & setters for class attributes */
 
+	public int getId() {
+		try {
+			return Integer.parseInt(mPartyInfosValue.get(POS_ID));
+		} catch (IndexOutOfBoundsException e) {
+			return Integer.MIN_VALUE;
+		}
+	}
+
+	public void setId(int iId) {
+		mPartyInfosName.set(POS_ID, ID);
+		mPartyInfosValue.set(POS_ID, String.valueOf(iId));
+	}
+	
 	public String getTitle() {
 		try {
 			return mPartyInfosValue.get(POS_TITLE);
@@ -195,8 +218,8 @@ public class Party {
 	}
 
 	public void setTitle(String iTitle) {
-		mPartyInfosName.add(POS_TITLE, TITLE);
-		mPartyInfosValue.add(POS_TITLE, iTitle);
+		mPartyInfosName.set(POS_TITLE, TITLE);
+		mPartyInfosValue.set(POS_TITLE, iTitle);
 	}
 
 	public String getDescription() {
@@ -208,8 +231,8 @@ public class Party {
 	}
 
 	public void setDescription(String iDescription) {
-		mPartyInfosName.add(POS_DESCRIPTION, DESCRIPTION);
-		mPartyInfosValue.add(POS_DESCRIPTION, iDescription);
+		mPartyInfosName.set(POS_DESCRIPTION, DESCRIPTION);
+		mPartyInfosValue.set(POS_DESCRIPTION, iDescription);
 	}
 
 	public String getContactData() {
@@ -221,8 +244,8 @@ public class Party {
 	}
 
 	public void setContactData(String iContactData) {
-		mPartyInfosName.add(POS_CONTACT_DATA, CONTACT_DATA);
-		mPartyInfosValue.add(POS_CONTACT_DATA, iContactData);
+		mPartyInfosName.set(POS_CONTACT_DATA, CONTACT_DATA);
+		mPartyInfosValue.set(POS_CONTACT_DATA, iContactData);
 	}
 
 	public String getUserId() {
@@ -234,8 +257,8 @@ public class Party {
 	}
 
 	public void setUserId(String iUserId) {
-		mPartyInfosName.add(POS_USER_ID, USER_ID);
-		mPartyInfosValue.add(POS_USER_ID, iUserId);
+		mPartyInfosName.set(POS_USER_ID, USER_ID);
+		mPartyInfosValue.set(POS_USER_ID, iUserId);
 	}
 
 	public String getStartDate() {
@@ -247,8 +270,8 @@ public class Party {
 	}
 
 	public void setStartDate(String iStartDate) {
-		mPartyInfosName.add(POS_START_DATE, START_DATE);
-		mPartyInfosValue.add(POS_START_DATE, iStartDate);
+		mPartyInfosName.set(POS_START_DATE, START_DATE);
+		mPartyInfosValue.set(POS_START_DATE, iStartDate);
 	}
 
 	public String getEndDate() {
@@ -260,8 +283,8 @@ public class Party {
 	}
 
 	public void setEndDate(String iEndDate) {
-		mPartyInfosName.add(POS_END_DATE, END_DATE);
-		mPartyInfosValue.add(POS_END_DATE, iEndDate);
+		mPartyInfosName.set(POS_END_DATE, END_DATE);
+		mPartyInfosValue.set(POS_END_DATE, iEndDate);
 	}
 
 	public int getStartHour() {
@@ -273,8 +296,8 @@ public class Party {
 	}
 
 	public void setStartHour(int iStartHour) {
-		mPartyInfosName.add(POS_START_HOUR, START_HOUR);
-		mPartyInfosValue.add(POS_START_HOUR, String.valueOf(iStartHour));
+		mPartyInfosName.set(POS_START_HOUR, START_HOUR);
+		mPartyInfosValue.set(POS_START_HOUR, String.valueOf(iStartHour));
 	}
 
 	public int getEndHour() {
@@ -286,8 +309,8 @@ public class Party {
 	}
 
 	public void setEndHour(int iEndHour) {
-		mPartyInfosName.add(POS_END_HOUR, END_HOUR);
-		mPartyInfosValue.add(POS_END_HOUR, String.valueOf(iEndHour));
+		mPartyInfosName.set(POS_END_HOUR, END_HOUR);
+		mPartyInfosValue.set(POS_END_HOUR, String.valueOf(iEndHour));
 	}
 
 	public LocationInfo getLocation() {
@@ -299,8 +322,8 @@ public class Party {
 	}
 
 	public void setLocation(LocationInfo iLocation) {
-		mPartyInfosName.add(POS_LOCATION, LOCATION);
-		mPartyInfosValue.add(POS_LOCATION, iLocation.toXML());
+		mPartyInfosName.set(POS_LOCATION, LOCATION);
+		mPartyInfosValue.set(POS_LOCATION, iLocation.toXML());
 	}
 
 	public String getImage() {
@@ -312,8 +335,8 @@ public class Party {
 	}
 
 	public void setImage(String iImage) {
-		mPartyInfosName.add(POS_IMAGE, IMAGE);
-		mPartyInfosValue.add(POS_IMAGE, iImage);
+		mPartyInfosName.set(POS_IMAGE, IMAGE);
+		mPartyInfosValue.set(POS_IMAGE, iImage);
 	}
 
 	public int getNrOfAttendees() {
@@ -325,8 +348,21 @@ public class Party {
 	}
 
 	public void setNrOfAttendess(int iNrOfAttendees) {
-		mPartyInfosName.add(POS_NR_OF_ATTENDEES, ATTENDEES);
-		mPartyInfosValue.add(POS_NR_OF_ATTENDEES,
+		mPartyInfosName.set(POS_NR_OF_ATTENDEES, ATTENDEES);
+		mPartyInfosValue.set(POS_NR_OF_ATTENDEES,
 				String.valueOf(iNrOfAttendees));
+	}
+	
+	public Double getModifiedDate() {
+		try {
+			return Double.parseDouble(mPartyInfosValue.get(POS_MODIFIED_DATE));
+		} catch (IndexOutOfBoundsException e) {
+			return Double.MIN_VALUE;
+		}
+	}
+
+	public void setModifiedDate(Double iModifiedDate) {
+		mPartyInfosName.set(POS_MODIFIED_DATE, MODIFIED_DATE);
+		mPartyInfosValue.set(POS_MODIFIED_DATE, String.valueOf(iModifiedDate));
 	}
 }

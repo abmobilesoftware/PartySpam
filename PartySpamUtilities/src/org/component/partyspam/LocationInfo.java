@@ -138,8 +138,8 @@ public class LocationInfo {
 	}
 	
 	public void setLatitude(Double iLatitude) {
-		mPartyInfosName.add(LATITUDE_POS, LATITUDE);
-		mPartyInfosValue.add(LATITUDE_POS, iLatitude.toString());
+		mPartyInfosName.set(LATITUDE_POS, LATITUDE);
+		mPartyInfosValue.set(LATITUDE_POS, iLatitude.toString());
 	}
 	
 	public Double getLongitude() {
@@ -151,8 +151,8 @@ public class LocationInfo {
 	}
 	
 	public void setLongitude(Double iLongitude) {
-		mPartyInfosName.add(LONGITUDE_POS, LONGITUDE);
-		mPartyInfosValue.add(LONGITUDE_POS, iLongitude.toString());
+		mPartyInfosName.set(LONGITUDE_POS, LONGITUDE);
+		mPartyInfosValue.set(LONGITUDE_POS, iLongitude.toString());
 	}
 		
 	public int getRadius() {
@@ -164,8 +164,8 @@ public class LocationInfo {
 	}
 	
 	public void setRadius(int iRadius) {
-		mPartyInfosName.add(RADIUS_POS, RADIUS);
-		mPartyInfosValue.add(RADIUS_POS, String.valueOf(iRadius));
+		mPartyInfosName.set(RADIUS_POS, RADIUS);
+		mPartyInfosValue.set(RADIUS_POS, String.valueOf(iRadius));
 	}
 
 	public String getAdditionalLocationData() {
@@ -177,7 +177,7 @@ public class LocationInfo {
 	}
 	
 	public void setAdditionalLocationData(String iAdditionalLocationData) {
-		mPartyInfosName.add(ADDITIONAL_DATA_POS, ADDITIONAL_LOCATION_DATA);
-		mPartyInfosValue.add(ADDITIONAL_DATA_POS, String.valueOf(iAdditionalLocationData));
+		mPartyInfosName.set(ADDITIONAL_DATA_POS, ADDITIONAL_LOCATION_DATA);
+		mPartyInfosValue.set(ADDITIONAL_DATA_POS, String.valueOf(iAdditionalLocationData));
 	}
 }

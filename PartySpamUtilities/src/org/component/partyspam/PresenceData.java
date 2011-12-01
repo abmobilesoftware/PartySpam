@@ -126,8 +126,8 @@ public class PresenceData {
 	}
 	
 	public void setLocation(LocationInfo iLocation) {
-		mPartyInfosName.add(LOCATION_POS, LOCATION);
-		mPartyInfosValue.add(LOCATION_POS, iLocation.toXML());
+		mPartyInfosName.set(LOCATION_POS, LOCATION);
+		mPartyInfosValue.set(LOCATION_POS, iLocation.toXML());
 	}
 	
 	public String getPhoneId() {
@@ -139,7 +139,7 @@ public class PresenceData {
 	}
 	
 	public void setPhoneId(String iPhoneId) {
-		mPartyInfosName.add(PHONE_ID_POS, PHONE_ID);
-		mPartyInfosValue.add(PHONE_ID_POS, iPhoneId);
+		mPartyInfosName.set(PHONE_ID_POS, PHONE_ID);
+		mPartyInfosValue.set(PHONE_ID_POS, iPhoneId);
 	}
 }
