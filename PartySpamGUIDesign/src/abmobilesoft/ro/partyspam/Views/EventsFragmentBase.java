@@ -189,7 +189,7 @@ public abstract class EventsFragmentBase extends ListFragment
 			return mParties.get(arg0).getId();
 		}
 
-		private static final String HOURS_MINUTES_SEPARATOR = ":";
+		
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view;
 			if (convertView == null) {
@@ -205,12 +205,7 @@ public abstract class EventsFragmentBase extends ListFragment
 					.setImageDrawable(drawable);
 			((TextView) view.findViewById(R.id.evListViewTxtEventTitle))
 					.setText(item.getTitle());
-			int lStartTimeExtended = item.getStartHour();
-			int lHours = lStartTimeExtended / 100;
-			int lMinutes = lStartTimeExtended % 100;
-			String lStartHourAndDate = item.getStartDate() + " "
-					+ String.valueOf(lHours) + HOURS_MINUTES_SEPARATOR
-					+ String.valueOf(lMinutes);
+			String lStartHourAndDate = StringFormattingForParty.extractDateAndHourStringFromInteger(item.getStartHour(),item.getStartDate());
 			((TextView) view.findViewById(R.id.evListViewTxtStartDateAndHour))
 					.setText(lStartHourAndDate);
 
@@ -219,5 +214,7 @@ public abstract class EventsFragmentBase extends ListFragment
 					.setText(lPartyLocation.getAdditionalLocationData());
 			return view;
 		}
+
+		
 	}
 }

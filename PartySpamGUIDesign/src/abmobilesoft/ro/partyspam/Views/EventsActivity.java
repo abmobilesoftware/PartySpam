@@ -112,8 +112,7 @@ public class EventsActivity extends FragmentActivity {
 						100, "Observatorului 19 - bring whatever you would like to drink and high spirits - it's going to be a blast!");
 				int lPartyId = 1;
 				String lEventTitle = "Demo Title " + String.valueOf(i);
-				String lEventDescription = "Demo Description"
-						+ String.valueOf(i);
+				String lEventDescription = "Super party tonight at my crib";
 				String lContactDetails = "DemoContactDetails";
 				String lUserId = "DemoUserID";
 				int lNrOfAttendees = 14;

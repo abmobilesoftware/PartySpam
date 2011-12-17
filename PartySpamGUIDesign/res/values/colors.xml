@@ -19,4 +19,6 @@
     <color name="honeycombish_blue">#FF58BAED</color>
     <color name="soft_grey">#FF777777</color>
     <color name="background">#FFEFEFEF</color>
+    <color name="separator_background">#FF58BAED</color>
+    <color name="separator_text_color">#FF000000</color>
 </resources>

@@ -62,7 +62,8 @@ public class CreateEventsStep2Activity extends FragmentActivity {
 		{
 			Party lPartyToCreate = mNewEventRepository.getParty();
 			String lAdditionalLocationData = lPartyToCreate.getLocation().getAdditionalLocationData();
-			if (!lAdditionalLocationData.isEmpty())
+			//cannot use isEmpty since it is only available from API version 9 onwards
+			if (lAdditionalLocationData!= null && lAdditionalLocationData!="") 
 			{
 				txtAdditionalLocationData.setText(lAdditionalLocationData);	
 			}

@@ -39,7 +39,8 @@ public class BusinessLogic implements PacketListener {
 		mApplicationContext = iApplicationContext;
 		connectToXMPPServer();
 	}
-
+ 
+	
 	private void connectToXMPPServer() {
 		if (mCon == null) {
 			mCon = XMPPConnect.getInstance(XMPP_HOST, XMPP_RESOURCE,
@@ -51,7 +52,12 @@ public class BusinessLogic implements PacketListener {
 						lCurrentUserRegistrationData.toXML());				
 				mCon.sendPresence(Presence.Type.available,
 						lCurrentUserRegistrationData.toXML());
-			}
+			}			
+		}
+		else
+		{
+			//TODO check the validity of the connection and if not valid anymore 
+			//e.g. InvalidStateException			
 		}
 	}
 

@@ -69,5 +69,9 @@
         <item name="android:textSize">13sp</item>        
         <item name="android:textStyle">normal</item>
     </style>
+     <style name="EventDescriptionTextAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textSize">17sp</item>        
+        <item name="android:textStyle">normal</item>
+    </style>
 
 </resources>
