@@ -4,8 +4,8 @@
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry kind="lib" path="D:/Work/PartySpam/modifiedaSmack.jar"/>
-	<classpathentry kind="lib" path="D:/Work/PartySpam/PartySpamUtilities.jar"/>
+	<classpathentry exported="true" kind="lib" path="D:/Work/PartySpam/PartySpamUtilities.jar"/>
 	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/com_actionbarsherlock"/>
+	<classpathentry exported="true" kind="lib" path="D:/Work/PartySpam/modifiedASmackLib.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

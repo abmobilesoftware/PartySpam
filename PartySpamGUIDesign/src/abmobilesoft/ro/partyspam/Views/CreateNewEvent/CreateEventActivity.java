@@ -58,12 +58,6 @@ public class CreateEventActivity extends FragmentActivity {
 		}
 
 	}
-//	@Override
-//	protected void onSaveInstanceState(Bundle outState) {
-//		super.onSaveInstanceState(outState);
-//		outState.putInt("index", getSupportActionBar()
-//				.getSelectedNavigationIndex());
-//	}
 
 	public static class MyAdapter extends FragmentStatePagerAdapter {
 		public MyAdapter(FragmentManager fm) {

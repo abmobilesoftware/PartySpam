@@ -35,6 +35,7 @@ public class EventsActivity extends FragmentActivity {
 		private static final int REFRESH_ID = Menu.FIRST;
 		private static final int SCANOPTIONS_ID = REFRESH_ID + 1;
 		private static final int SETTINGS_ID = SCANOPTIONS_ID + 1;
+		private static final int DEMOREFRESH_ID = SETTINGS_ID + 1;
 		@Override
 		protected void customInitialize(Bundle savedInstanceState) {
 			setEmptyText("No parties.  Select 'Refresh' to see what's around");
@@ -78,6 +79,9 @@ public class EventsActivity extends FragmentActivity {
 					.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 			menu.add(Menu.NONE, SETTINGS_ID, 0, "Settings").setShowAsAction(
 					MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			menu.add(Menu.NONE, DEMOREFRESH_ID, 0, "DemoRefresh").setShowAsAction(
+					MenuItem.SHOW_AS_ACTION_IF_ROOM);
+			
 		}
 
 		@Override
@@ -85,13 +89,16 @@ public class EventsActivity extends FragmentActivity {
 			switch (item.getItemId()) {
 				case REFRESH_ID :
 					clearData();
-					// mBL.requestEvents();
-					setListShown(false);
-					populateListWithDummyData();
+					mBL.requestEvents();					
 					return true;
 				case SCANOPTIONS_ID :
 					return true;
 				case SETTINGS_ID :
+					return true;
+				case DEMOREFRESH_ID:
+					clearData();					
+					setListShown(false);
+					populateListWithDummyData();
 					return true;
 				default :
 					return super.onOptionsItemSelected(item);
@@ -102,9 +109,9 @@ public class EventsActivity extends FragmentActivity {
 			int lNrOfPartiesToCreate = 5;
 			for (int i = 0; i < lNrOfPartiesToCreate; ++i) {
 				LocationInfo lDemoLocationInfo = new LocationInfo(20.20, 40.40,
-						100, "DemoAdditionalLocationData");
+						100, "Observatorului 19 - bring whatever you would like to drink and high spirits - it's going to be a blast!");
 				int lPartyId = 1;
-				String lEventTitle = "Demo Title" + String.valueOf(i);
+				String lEventTitle = "Demo Title " + String.valueOf(i);
 				String lEventDescription = "Demo Description"
 						+ String.valueOf(i);
 				String lContactDetails = "DemoContactDetails";

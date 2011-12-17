@@ -1,20 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="wrap_content"
+  
     android:padding="6dip" >
-
     <ImageView
         android:id="@+id/evListViewIconEvent"
         android:layout_width="wrap_content"
+        android:scaleType="centerInside"
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="6dip" />
+        android:layout_marginRight="6dip"
+        android:layout_marginLeft="6dip" />
 
     <TextView
         android:id="@+id/evListViewTxtEventTitle"
         android:layout_width="fill_parent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="italic"         
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
@@ -25,8 +29,8 @@
     <TextView
         android:id="@+id/evListViewTxtStartDateAndHour"
         android:layout_width="fill_parent"
+        android:textAppearance="@style/ListItemTextAppearance" 
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/evListViewIconEvent"
         android:layout_below="@id/evListViewTxtEventTitle"
@@ -37,6 +41,7 @@
     <TextView
         android:id="@+id/evListViewTxtAdditionalInfo"
         android:layout_width="fill_parent"
+        android:textAppearance="@style/ListItemTextAppearance" 
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

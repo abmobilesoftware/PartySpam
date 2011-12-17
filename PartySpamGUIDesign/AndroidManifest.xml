@@ -21,6 +21,7 @@
         </activity>
         
          <activity android:name=".Views.CreateNewEvent.CreateEventActivity"/>
+          <activity android:name=".Views.EventDetailsActivity"/>
     </application>
 
 </manifest>

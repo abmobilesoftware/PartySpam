@@ -14,6 +14,7 @@ import org.xml.sax.SAXParseException;
 import abmobilesoft.ro.partyspam.BusinessLogic;
 import abmobilesoft.ro.partyspam.R;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,24 +25,24 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public abstract class EventsFragmentBase extends ListFragment
 		implements
 			PacketListener {
 	private static final String EVENTS_SAVE_KEY = "loadedEvents";
-	
+	private static final int ACTIVITY_VIEW_EVENT_DETAILS = 1;
+
 	protected BusinessLogic mBL = null;
-	PartyAdapter mDataAdapter ;
-	
+	PartyAdapter mDataAdapter;
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		// we have the list of displayed events
 		ArrayList<String> lEventsSerializedAsString = new ArrayList<String>();
-		for (Party lParty: mDataAdapter.getParties())
-		{
+		for (Party lParty : mDataAdapter.getParties()) {
 			lEventsSerializedAsString.add(lParty.toXML());
 		}
 		outState.putStringArrayList(EVENTS_SAVE_KEY, lEventsSerializedAsString);
@@ -53,23 +54,25 @@ public abstract class EventsFragmentBase extends ListFragment
 
 		// we attempt to restore any already displayed events
 		String[] defaultData = new String[]{};
-		/*according to http://stackoverflow.com/questions/3200551/unable-to-modify-arrayadapter-in-listview it is important
-		 * to set the data source not to a string array but to a string list array because if we set it to a string array then we 
-		 * won't be able to further add/remove elements from it
-		*/
+		/*
+		 * according to
+		 * http://stackoverflow.com/questions/3200551/unable-to-modify
+		 * -arrayadapter-in-listview it is important to set the data source not
+		 * to a string array but to a string list array because if we set it to
+		 * a string array then we won't be able to further add/remove elements
+		 * from it
+		 */
 		ArrayList<String> lst = new ArrayList<String>();
-		if (savedInstanceState == null) {			 
-			lst.addAll(Arrays.asList(defaultData));			
+		if (savedInstanceState == null) {
+			lst.addAll(Arrays.asList(defaultData));
 		} else {
 			lst = savedInstanceState.getStringArrayList(EVENTS_SAVE_KEY);
-			if (lst == null || lst.isEmpty())
-			{
-				lst.addAll(Arrays.asList(defaultData));									
-			}						
-		}		
+			if (lst == null || lst.isEmpty()) {
+				lst.addAll(Arrays.asList(defaultData));
+			}
+		}
 		ArrayList<Party> lRestoredParties = new ArrayList<Party>();
-		for (String iStringRepresentationOfParty: lst)
-		{
+		for (String iStringRepresentationOfParty : lst) {
 			Party lPartyCreatedFromXML;
 			try {
 				lPartyCreatedFromXML = new Party(iStringRepresentationOfParty);
@@ -83,8 +86,8 @@ public abstract class EventsFragmentBase extends ListFragment
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}		
-		}		
+			}
+		}
 		mDataAdapter = new PartyAdapter(getActivity(), lRestoredParties);
 		setListAdapter(mDataAdapter);
 
@@ -95,8 +98,19 @@ public abstract class EventsFragmentBase extends ListFragment
 			// TODO we should log the error
 			System.exit(0);
 		}
-		//on start do not shown a loading icon
+		// on start do not shown a loading icon
 		setListShown(true);
+	}
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		// TODO Auto-generated method stub
+		super.onListItemClick(l, v, position, id);
+		Party lSelectedParty = (Party) mDataAdapter.getItem(position);
+		Intent i = new Intent(this.getActivity(), EventDetailsActivity.class);
+		i.putExtra(EventDetailsActivity.PARTY_DESCRIPTION,
+				lSelectedParty.toXML());
+		startActivityForResult(i, ACTIVITY_VIEW_EVENT_DETAILS);
 	}
 
 	// this should be overridden in the implementations
@@ -124,82 +138,86 @@ public abstract class EventsFragmentBase extends ListFragment
 	public void processPacket(Packet iPacket) {
 		processPacketImplementation(iPacket);
 	}
-	
-	protected void addPartyToList(Party iParty)
-	{		
-		mDataAdapter.add(iParty);				
+
+	protected void addPartyToList(Party iParty) {
+		mDataAdapter.add(iParty);
 	}
-	
-	protected void clearData()
-	{
-		  mDataAdapter.clear();
+
+	protected void clearData() {
+		mDataAdapter.clear();
 	}
 
 	public class PartyAdapter extends BaseAdapter {
-	    Context _context;
-	    ArrayList<Party> mParties;
-	    private final LayoutInflater mInflater;
+		Context _context;
+		ArrayList<Party> mParties;
+		private final LayoutInflater mInflater;
 
-	    public PartyAdapter(Context context, ArrayList<Party> iParties) {
-	        _context = context;
-	        mParties = iParties;
-	        mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-	    }
-	    
-	    public  ArrayList<Party> getParties()
-	    {
-	    	return mParties;
-	    }
-	    
-	    public void add(Party iParty)
-	    {
-	    	mParties.add(iParty);
-	    	//the call to notifyDataSetChanged is important as it will lead to update of the GUI
-	    	notifyDataSetChanged();
-	    }
-	    public void clear()
-	    {
-	    	mParties.clear();
-	    	notifyDataSetChanged();
-	    }
+		public PartyAdapter(Context context, ArrayList<Party> iParties) {
+			_context = context;
+			mParties = iParties;
+			mInflater = (LayoutInflater) context
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
 
-	    public int getCount() {
-	        if (mParties != null)
-	            return mParties.size();
-	        else
-	            return 0;
-	    }
+		public ArrayList<Party> getParties() {
+			return mParties;
+		}
 
-	    public Object getItem(int arg0) {
-	        return mParties.get(arg0);
-	    }
+		public void add(Party iParty) {
+			mParties.add(iParty);
+			// the call to notifyDataSetChanged is important as it will lead to
+			// update of the GUI
+			notifyDataSetChanged();
+		}
+		public void clear() {
+			mParties.clear();
+			notifyDataSetChanged();
+		}
 
-	    public long getItemId(int arg0) {
-	        return mParties.get(arg0).getId();
-	    }
+		public int getCount() {
+			if (mParties != null)
+				return mParties.size();
+			else
+				return 0;
+		}
 
-	    private static final String HOURS_MINUTES_SEPARATOR = ":";
-	    public View getView(int position, View convertView, ViewGroup parent) {
-	    	View view;
-            if (convertView == null) {
-                view = mInflater.inflate(R.layout.list_item_icon_text, parent, false);
-            } else {
-                view = convertView;
-            }
-            Party item = (Party) getItem(position);
-            Resources res = getResources();
-            Drawable drawable = res.getDrawable(R.drawable.ic_launcher);
-            ((ImageView)view.findViewById(R.id.evListViewIconEvent)).setImageDrawable(drawable);
-            ((TextView)view.findViewById(R.id.evListViewTxtEventTitle)).setText(item.getTitle());
-            int lStartTimeExtended = item.getStartHour();
+		public Object getItem(int arg0) {
+			return mParties.get(arg0);
+		}
+
+		public long getItemId(int arg0) {
+			return mParties.get(arg0).getId();
+		}
+
+		private static final String HOURS_MINUTES_SEPARATOR = ":";
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view;
+			if (convertView == null) {
+				view = mInflater.inflate(R.layout.list_item_icon_text, parent,
+						false);
+			} else {
+				view = convertView;
+			}
+			Party item = (Party) getItem(position);
+			Resources res = getResources();
+			Drawable drawable = res.getDrawable(R.drawable.ic_launcher);
+			((ImageView) view.findViewById(R.id.evListViewIconEvent))
+					.setImageDrawable(drawable);
+			((TextView) view.findViewById(R.id.evListViewTxtEventTitle))
+					.setText(item.getTitle());
+			int lStartTimeExtended = item.getStartHour();
 			int lHours = lStartTimeExtended / 100;
 			int lMinutes = lStartTimeExtended % 100;
-            String lStartHourAndDate = item.getStartDate() + " " +String.valueOf(lHours) + HOURS_MINUTES_SEPARATOR + String.valueOf(lMinutes);
-            ((TextView)view.findViewById(R.id.evListViewTxtStartDateAndHour)).setText(lStartHourAndDate);
-            
-            LocationInfo lPartyLocation = item.getLocation();
-			((TextView)view.findViewById(R.id.evListViewTxtAdditionalInfo)).setText(lPartyLocation.getAdditionalLocationData());
-            return view;
-	    }		
-	}	
+			String lStartHourAndDate = item.getStartDate() + " "
+					+ String.valueOf(lHours) + HOURS_MINUTES_SEPARATOR
+					+ String.valueOf(lMinutes);
+			((TextView) view.findViewById(R.id.evListViewTxtStartDateAndHour))
+					.setText(lStartHourAndDate);
+
+			LocationInfo lPartyLocation = item.getLocation();
+			((TextView) view.findViewById(R.id.evListViewTxtAdditionalInfo))
+					.setText(lPartyLocation.getAdditionalLocationData());
+			return view;
+		}
+	}
 }

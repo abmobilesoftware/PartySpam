@@ -15,11 +15,11 @@ import android.content.Context;
 import android.telephony.TelephonyManager;
 
 public class BusinessLogic implements PacketListener {
-	private static final String XMPP_HOST = "10.0.2.2";
-	// private static final String XMPP_HOST = "46.137.116.121";
+	//private static final String XMPP_HOST = "10.0.2.2";
+	 private static final String XMPP_HOST = "46.137.116.121";
 	private static final String XMPP_RESOURCE = "PC";
-	private static final String XMPP_COMPONENT = "partyspam.andospc";
-	// private static final String XMPP_COMPONENT = "logic.partyspam";
+	//private static final String XMPP_COMPONENT = "partyspam.andospc";
+	 private static final String XMPP_COMPONENT = "logic.partyspam";
 
 	// The link with the xmpp brodcasting component.
 	private XMPPConnect mCon = null;
@@ -41,16 +41,18 @@ public class BusinessLogic implements PacketListener {
 	}
 
 	private void connectToXMPPServer() {
-//		if (mCon == null) {
-//			mCon = XMPPConnect.getInstance(XMPP_HOST, XMPP_RESOURCE,
-//					XMPP_COMPONENT, this);
-//			if (mCon != null) {
-//				PresenceData lCurrentUserRegistrationData = new PresenceData(
-//						getCurrentLocation(), getInstallationUniqueID());
-//				mCon.sendPresence(Presence.Type.subscribe,
-//						lCurrentUserRegistrationData.toXML());
-//			}
-//		}
+		if (mCon == null) {
+			mCon = XMPPConnect.getInstance(XMPP_HOST, XMPP_RESOURCE,
+					XMPP_COMPONENT, this);
+			if (mCon != null) {
+				PresenceData lCurrentUserRegistrationData = new PresenceData(
+						getCurrentLocation(), getInstallationUniqueID());
+				mCon.sendPresence(Presence.Type.subscribe,
+						lCurrentUserRegistrationData.toXML());				
+				mCon.sendPresence(Presence.Type.available,
+						lCurrentUserRegistrationData.toXML());
+			}
+		}
 	}
 
 	public static BusinessLogic getInstance(PacketListener iNewPacketListener) {
@@ -84,7 +86,7 @@ public class BusinessLogic implements PacketListener {
 	}
 
 	public void requestEvents() {
-		LocationInfo currentLocation = new LocationInfo(20.12, 41.42, 1000, "");
+		LocationInfo currentLocation = new LocationInfo(20.20, 40.40, 1000, "");
 		connectToXMPPServer();
 		if (mCon != null) {
 			mCon.sendMessage("Party", currentLocation.toXML(),
