@@ -65,13 +65,13 @@ public class XMPPClient implements PacketListener {
 			 * the message you must notify the xmpp component about your current
 			 * location.
 			 */
-			LocationInfo lQueryLocationInfo = new LocationInfo(20.12, 41.42, 1000, "");
+			LocationInfo lQueryLocationInfo = new LocationInfo(20.12, 41.42, 10000, "");
 			if (lMsg.equals("?")) {
 				lXmppClient.sendMessage("Party", lQueryLocationInfo.toXML(),  Message.Type.getEvents);
 			} else {							
-				Party lNewParty = new Party("Title: " + lMsg, lMsg, "07524987", 
+				Party lNewParty = new Party(1, "Title: " + lMsg, lMsg, "07524987", 
 						"mihai@mihai.com", 0, "2011", "2012", 15, 20,
-						lQueryLocationInfo, "no image");				
+						lQueryLocationInfo, "no image", 0);				
 				mCon.sendMessage("New Party", lNewParty.toXML(), Message.Type.createEvent);	
 				lXmppClient.sendMessage("Party", lNewParty.toXML(),
 						Message.Type.createEvent);
@@ -84,7 +84,7 @@ public class XMPPClient implements PacketListener {
 
 	private LocationInfo getCurrentLocation() {
 		/* Get the current location from the gps device */
-		return new LocationInfo(45.45241, 27.17424, Integer.MIN_VALUE, "");
+		return new LocationInfo(20.152, 32.254, Integer.MIN_VALUE, "");
 	}
 
 	@Override
