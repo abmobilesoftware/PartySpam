@@ -1,32 +1,50 @@
 package abmobilesoft.ro.partyspam.Views;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.component.partyspam.LocationInfo;
 import org.component.partyspam.Party;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.Packet;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import abmobilesoft.ro.partyspam.BusinessLogic;
+import abmobilesoft.ro.partyspam.R;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public abstract class EventsFragmentBase extends ListFragment
 		implements
 			PacketListener {
 	private static final String EVENTS_SAVE_KEY = "loadedEvents";
-
-	protected ArrayList<String> mEvents;
+	
 	protected BusinessLogic mBL = null;
-	ArrayAdapter<String> mDataAdapter ;
-
+	PartyAdapter mDataAdapter ;
+	
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// TODO Auto-generated method stub
 		super.onSaveInstanceState(outState);
 		// we have the list of displayed events
-		outState.putStringArrayList(EVENTS_SAVE_KEY, mEvents);
+		ArrayList<String> lEventsSerializedAsString = new ArrayList<String>();
+		for (Party lParty: mDataAdapter.getParties())
+		{
+			lEventsSerializedAsString.add(lParty.toXML());
+		}
+		outState.putStringArrayList(EVENTS_SAVE_KEY, lEventsSerializedAsString);
 	}
 
 	private void baseInitialize(Bundle savedInstanceState) {
@@ -36,7 +54,8 @@ public abstract class EventsFragmentBase extends ListFragment
 		// we attempt to restore any already displayed events
 		String[] defaultData = new String[]{};
 		/*according to http://stackoverflow.com/questions/3200551/unable-to-modify-arrayadapter-in-listview it is important
-		 * to set the data source not to a string array but to a string list array
+		 * to set the data source not to a string array but to a string list array because if we set it to a string array then we 
+		 * won't be able to further add/remove elements from it
 		*/
 		ArrayList<String> lst = new ArrayList<String>();
 		if (savedInstanceState == null) {			 
@@ -47,12 +66,26 @@ public abstract class EventsFragmentBase extends ListFragment
 			{
 				lst.addAll(Arrays.asList(defaultData));									
 			}						
-		}	
-		mEvents = new ArrayList<String>();
-		mEvents.addAll(lst);
-
-		mDataAdapter = new ArrayAdapter<String>(
-				getActivity(), android.R.layout.simple_list_item_1, lst);
+		}		
+		ArrayList<Party> lRestoredParties = new ArrayList<Party>();
+		for (String iStringRepresentationOfParty: lst)
+		{
+			Party lPartyCreatedFromXML;
+			try {
+				lPartyCreatedFromXML = new Party(iStringRepresentationOfParty);
+				lRestoredParties.add(lPartyCreatedFromXML);
+			} catch (SAXParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+		}		
+		mDataAdapter = new PartyAdapter(getActivity(), lRestoredParties);
 		setListAdapter(mDataAdapter);
 
 		try {
@@ -93,16 +126,80 @@ public abstract class EventsFragmentBase extends ListFragment
 	}
 	
 	protected void addPartyToList(Party iParty)
-	{
-		final Party lParty = iParty;		
-		String lPartyDescription = lParty.getDescription();
-		mDataAdapter.add(lPartyDescription);			
-		mEvents.add(lPartyDescription);
+	{		
+		mDataAdapter.add(iParty);				
 	}
 	
 	protected void clearData()
 	{
 		  mDataAdapter.clear();
-		  mEvents.clear();
 	}
+
+	public class PartyAdapter extends BaseAdapter {
+	    Context _context;
+	    ArrayList<Party> mParties;
+	    private final LayoutInflater mInflater;
+
+	    public PartyAdapter(Context context, ArrayList<Party> iParties) {
+	        _context = context;
+	        mParties = iParties;
+	        mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    }
+	    
+	    public  ArrayList<Party> getParties()
+	    {
+	    	return mParties;
+	    }
+	    
+	    public void add(Party iParty)
+	    {
+	    	mParties.add(iParty);
+	    	//the call to notifyDataSetChanged is important as it will lead to update of the GUI
+	    	notifyDataSetChanged();
+	    }
+	    public void clear()
+	    {
+	    	mParties.clear();
+	    	notifyDataSetChanged();
+	    }
+
+	    public int getCount() {
+	        if (mParties != null)
+	            return mParties.size();
+	        else
+	            return 0;
+	    }
+
+	    public Object getItem(int arg0) {
+	        return mParties.get(arg0);
+	    }
+
+	    public long getItemId(int arg0) {
+	        return mParties.get(arg0).getId();
+	    }
+
+	    private static final String HOURS_MINUTES_SEPARATOR = ":";
+	    public View getView(int position, View convertView, ViewGroup parent) {
+	    	View view;
+            if (convertView == null) {
+                view = mInflater.inflate(R.layout.list_item_icon_text, parent, false);
+            } else {
+                view = convertView;
+            }
+            Party item = (Party) getItem(position);
+            Resources res = getResources();
+            Drawable drawable = res.getDrawable(R.drawable.ic_launcher);
+            ((ImageView)view.findViewById(R.id.evListViewIconEvent)).setImageDrawable(drawable);
+            ((TextView)view.findViewById(R.id.evListViewTxtEventTitle)).setText(item.getTitle());
+            int lStartTimeExtended = item.getStartHour();
+			int lHours = lStartTimeExtended / 100;
+			int lMinutes = lStartTimeExtended % 100;
+            String lStartHourAndDate = item.getStartDate() + " " +String.valueOf(lHours) + HOURS_MINUTES_SEPARATOR + String.valueOf(lMinutes);
+            ((TextView)view.findViewById(R.id.evListViewTxtStartDateAndHour)).setText(lStartHourAndDate);
+            
+            LocationInfo lPartyLocation = item.getLocation();
+			((TextView)view.findViewById(R.id.evListViewTxtAdditionalInfo)).setText(lPartyLocation.getAdditionalLocationData());
+            return view;
+	    }		
+	}	
 }

@@ -15,9 +15,11 @@ import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 
 public class XMPPClient implements PacketListener {
-	private static final String XMPP_HOST = "192.168.44.1";
+//	private static final String XMPP_HOST = "192.168.44.1";
+	private static final String XMPP_HOST = "46.137.116.121";
 	private static final String XMPP_RESOURCE = "PC";
-	private static final String XMPP_COMPONENT = "partyspam.andospc";
+//	private static final String XMPP_COMPONENT = "partyspam.andospc";
+	private static final String XMPP_COMPONENT = "logic.partyspam";
 	private static XMPPConnect mCon = null;
 
 	public void login() throws XMPPException {

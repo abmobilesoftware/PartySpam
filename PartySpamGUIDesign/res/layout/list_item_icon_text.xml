@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:padding="6dip" >
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
+    <ImageView
+        android:id="@+id/evListViewIconEvent"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="6dip" />
 
-          http://www.apache.org/licenses/LICENSE-2.0
+    <TextView
+        android:id="@+id/evListViewTxtEventTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_toRightOf="@id/evListViewIconEvent"
+        android:gravity="center_vertical" />
 
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
+    <TextView
+        android:id="@+id/evListViewTxtStartDateAndHour"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/evListViewIconEvent"
+        android:layout_below="@id/evListViewTxtEventTitle"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:layout_alignWithParentIfMissing="true" />
+    
+    <TextView
+        android:id="@+id/evListViewTxtAdditionalInfo"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@id/evListViewIconEvent"
+        android:layout_below="@id/evListViewTxtStartDateAndHour"
+        android:ellipsize="marquee"        
+        android:layout_alignWithParentIfMissing="true"
+    />
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ImageView android:id="@+id/icon"
-        android:layout_width="48dip"
-        android:layout_height="48dip" />
-
-    <TextView android:id="@+id/text"
-        android:layout_gravity="center_vertical"
-        android:layout_width="0dip"
-        android:layout_weight="1.0"
-        android:layout_height="wrap_content" />
-
-</LinearLayout>
+</RelativeLayout>

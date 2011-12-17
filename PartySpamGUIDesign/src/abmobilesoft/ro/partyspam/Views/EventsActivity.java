@@ -2,7 +2,9 @@ package abmobilesoft.ro.partyspam.Views;
 
 import java.io.IOException;
 
+import org.component.partyspam.LocationInfo;
 import org.component.partyspam.MessageProcessing;
+import org.component.partyspam.Party;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Packet;
 import org.xml.sax.SAXException;
@@ -28,9 +30,8 @@ public class EventsActivity extends FragmentActivity {
 			fm.beginTransaction().add(android.R.id.content, list).commit();
 		}
 	}
-	
-	public static class EventsListFragment extends EventsFragmentBase
- {
+
+	public static class EventsListFragment extends EventsFragmentBase {
 		private static final int REFRESH_ID = Menu.FIRST;
 		private static final int SCANOPTIONS_ID = REFRESH_ID + 1;
 		private static final int SETTINGS_ID = SCANOPTIONS_ID + 1;
@@ -45,7 +46,6 @@ public class EventsActivity extends FragmentActivity {
 				final Message lMessage = (Message) iPacket;
 				if (lMessage.getType() == Message.Type.getEvents) {
 					// only handle results of "GetEvent"
-				
 					this.getActivity().runOnUiThread(new Runnable() {
 						public void run() {
 							try {
@@ -63,8 +63,8 @@ public class EventsActivity extends FragmentActivity {
 							}
 							setListShown(true);
 						}
-						});
-				
+					});
+
 				}
 			}
 
@@ -83,10 +83,11 @@ public class EventsActivity extends FragmentActivity {
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item) {
 			switch (item.getItemId()) {
-				case REFRESH_ID :		
+				case REFRESH_ID :
 					clearData();
-					mBL.requestEvents();
+					// mBL.requestEvents();
 					setListShown(false);
+					populateListWithDummyData();
 					return true;
 				case SCANOPTIONS_ID :
 					return true;
@@ -95,6 +96,33 @@ public class EventsActivity extends FragmentActivity {
 				default :
 					return super.onOptionsItemSelected(item);
 			}
+		}
+		
+		private void populateListWithDummyData() {
+			int lNrOfPartiesToCreate = 5;
+			for (int i = 0; i < lNrOfPartiesToCreate; ++i) {
+				LocationInfo lDemoLocationInfo = new LocationInfo(20.20, 40.40,
+						100, "DemoAdditionalLocationData");
+				int lPartyId = 1;
+				String lEventTitle = "Demo Title" + String.valueOf(i);
+				String lEventDescription = "Demo Description"
+						+ String.valueOf(i);
+				String lContactDetails = "DemoContactDetails";
+				String lUserId = "DemoUserID";
+				int lNrOfAttendees = 14;
+				String lStartDate = "26-11-2011";
+				String lEndDate = "26-11-2011";
+				int lStartHour = 1040;
+				int lEndHour = 1045;
+				String lEventImage = "DemoImage";
+				double lModifiedDate = 100000.3128;
+				Party lParty = new Party(lPartyId, lEventTitle,
+						lEventDescription, lContactDetails, lUserId,
+						lNrOfAttendees, lStartDate, lEndDate, lStartHour,
+						lEndHour, lDemoLocationInfo, lEventImage, lModifiedDate);
+				addPartyToList(lParty);
+			}
+			setListShown(true);
 		}
 	}
 }
