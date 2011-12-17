@@ -3,6 +3,7 @@ package abmobilesoft.ro.partyspam.Views.CreateNewEvent;
 import org.component.partyspam.LocationInfo;
 import org.component.partyspam.Party;
 
+import abmobilesoft.ro.partyspam.BusinessLogic;
 import abmobilesoft.ro.partyspam.R;
 import abmobilesoft.ro.partyspam.Views.EventsActivity.EventsListFragment;
 import android.os.Bundle;
@@ -102,7 +103,12 @@ public class CreateEventsStep2Activity extends FragmentActivity {
 			lPartyToCreate.setEndDate(mBtnSelectEndDate.getText().toString());
 			lTimeAsString = mBtnSelectEndTime.getText().toString();
 			lHoursAndMinutes = lTimeAsString.split(HOURS_MINUTES_SEPARATOR);
-			lPartyToCreate.setEndHour(Integer.parseInt(lHoursAndMinutes[0]) * 100 + Integer.parseInt(lHoursAndMinutes[1]));			
+			lPartyToCreate.setEndHour(Integer.parseInt(lHoursAndMinutes[0]) * 100 + Integer.parseInt(lHoursAndMinutes[1]));
+			//TODO replace with real code once the localization on map works
+			BusinessLogic lBl = BusinessLogic.getInstance();
+			LocationInfo lNewPartyLocation = lBl.getCurrentLocation();
+			lNewPartyLocation.setAdditionalLocationData(txtAdditionalLocationData.getText().toString());
+			lPartyToCreate.setLocation(lNewPartyLocation);
 		}				
 	}
 }

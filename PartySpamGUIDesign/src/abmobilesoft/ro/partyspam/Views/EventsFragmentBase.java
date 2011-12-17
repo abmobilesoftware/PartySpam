@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.component.partyspam.LocationInfo;
+import org.component.partyspam.MessageProcessing;
 import org.component.partyspam.Party;
 import org.jivesoftware.smack.PacketListener;
 import org.jivesoftware.smack.packet.Packet;
@@ -22,7 +23,6 @@ import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -140,7 +140,13 @@ public abstract class EventsFragmentBase extends ListFragment
 	}
 
 	protected void addPartyToList(Party iParty) {
-		mDataAdapter.add(iParty);
+		final Party lParty = iParty;
+		this.getActivity().runOnUiThread(new Runnable() {
+			public void run() {			
+					mDataAdapter.add(lParty);
+					setListShown(true);
+			}
+		});		
 	}
 
 	protected void clearData() {

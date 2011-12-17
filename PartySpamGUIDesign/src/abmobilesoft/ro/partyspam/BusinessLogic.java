@@ -12,15 +12,19 @@ import org.jivesoftware.smack.packet.Presence;
 
 import abmobilesoft.ro.partyspam.support.Installation;
 import android.content.Context;
-import android.telephony.TelephonyManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 
 public class BusinessLogic implements PacketListener {
-	//private static final String XMPP_HOST = "10.0.2.2";
-	 private static final String XMPP_HOST = "46.137.116.121";
+	// private static final String XMPP_HOST = "10.0.2.2";
+	private static final String XMPP_HOST = "46.137.116.121";
 	private static final String XMPP_RESOURCE = "PC";
-	//private static final String XMPP_COMPONENT = "partyspam.andospc";
-	 private static final String XMPP_COMPONENT = "logic.partyspam";
-
+	// private static final String XMPP_COMPONENT = "partyspam.andospc";
+	private static final String XMPP_COMPONENT = "logic.partyspam";
+	LocationManager mLocationManager;
+	Location mLastKnownLocation;
 	// The link with the xmpp brodcasting component.
 	private XMPPConnect mCon = null;
 
@@ -37,10 +41,35 @@ public class BusinessLogic implements PacketListener {
 			// we have a coding error :(
 		}
 		mApplicationContext = iApplicationContext;
+		mLocationManager = (LocationManager) iApplicationContext
+				.getSystemService(Context.LOCATION_SERVICE);
+		// Define a listener that responds to location updates
+		LocationListener locationListener = new LocationListener() {
+			public void onLocationChanged(Location location) {
+				// Called when a new location is found by the network location
+				// provider.
+				updateUserLocation(location);
+			}
+
+			public void onStatusChanged(String provider, int status,
+					Bundle extras) {
+			}
+
+			public void onProviderEnabled(String provider) {
+			}
+
+			public void onProviderDisabled(String provider) {
+			}
+		};
+		// Register the listener with the Location Manager to receive location
+		// updates
+		mLocationManager.requestLocationUpdates(
+				LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		//
+		mLastKnownLocation= mLocationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		connectToXMPPServer();
 	}
- 
-	
+
 	private void connectToXMPPServer() {
 		if (mCon == null) {
 			mCon = XMPPConnect.getInstance(XMPP_HOST, XMPP_RESOURCE,
@@ -49,15 +78,14 @@ public class BusinessLogic implements PacketListener {
 				PresenceData lCurrentUserRegistrationData = new PresenceData(
 						getCurrentLocation(), getInstallationUniqueID());
 				mCon.sendPresence(Presence.Type.subscribe,
-						lCurrentUserRegistrationData.toXML());				
+						lCurrentUserRegistrationData.toXML());
 				mCon.sendPresence(Presence.Type.available,
 						lCurrentUserRegistrationData.toXML());
-			}			
-		}
-		else
-		{
-			//TODO check the validity of the connection and if not valid anymore 
-			//e.g. InvalidStateException			
+			}
+		} else {
+			// TODO check the validity of the connection and if not valid
+			// anymore
+			// e.g. InvalidStateException
 		}
 	}
 
@@ -92,7 +120,7 @@ public class BusinessLogic implements PacketListener {
 	}
 
 	public void requestEvents() {
-		LocationInfo currentLocation = new LocationInfo(20.20, 40.40, 1000, "");
+		LocationInfo currentLocation = getCurrentLocation();
 		connectToXMPPServer();
 		if (mCon != null) {
 			mCon.sendMessage("Party", currentLocation.toXML(),
@@ -100,26 +128,31 @@ public class BusinessLogic implements PacketListener {
 		}
 	}
 
-	public void createEvent(String iEvent) {
+	public void createEvent(Party iNewParty) {
 		// we create only "valid events"
-		if (iEvent != null && !iEvent.isEmpty()) {
-			LocationInfo lQueryLocationInfo = new LocationInfo(20.12, 41.42,
-					1000, "");
-			Party lNewParty = new Party(1,"Title: " + iEvent, iEvent, "07524987",
-					"mihai@mihai.com", 0, "2011", "2012", 15, 20,
-					lQueryLocationInfo, "no image",10000.1234);
+		if (iNewParty != null) 
+		{			
 			connectToXMPPServer();
 			if (mCon != null) {
-			mCon.sendMessage("New Party", lNewParty.toXML(),
-					Message.Type.createEvent);
+				mCon.sendMessage("New Party", iNewParty.toXML(),
+						Message.Type.createEvent);
 			}
 
 		}
 	}
-
+	private void updateUserLocation(Location iNewLocation) {
+		mLastKnownLocation = iNewLocation;
+	}
 	public LocationInfo getCurrentLocation() {
+		Double latitude = 45.45241;
+		Double longitude = 27.17424;
+		if (mLastKnownLocation!=null)
+		{
+			latitude = mLastKnownLocation.getLatitude();
+			longitude = mLastKnownLocation.getLongitude(); 
+		}
 		/* Get the current location from the gps device */
-		return new LocationInfo(45.45241, 27.17424, 10000, "");
+		return new LocationInfo(latitude,longitude, 1000, "");
 	}
 
 	public void addEvent(String iEvent) {

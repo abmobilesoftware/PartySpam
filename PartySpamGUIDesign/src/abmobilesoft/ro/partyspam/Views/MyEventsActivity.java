@@ -48,9 +48,8 @@ public class MyEventsActivity extends FragmentActivity {
 		protected void processPacketImplementation(Packet iPacket) {
 			if (iPacket instanceof Message) {
 				Message lMessage = (Message) iPacket;
-				if (lMessage.getType() == Message.Type.createEvent) {
-					// TODO - fix this later as right now it is here just as
-					// proof of concept
+				if (lMessage.getType() == Message.Type.myEventCreated) {
+					//we have received a confirmation that an event we created was actually created
 					try {
 						addPartyToList(MessageProcessing
 								.buildEventFromMessageBody(lMessage));

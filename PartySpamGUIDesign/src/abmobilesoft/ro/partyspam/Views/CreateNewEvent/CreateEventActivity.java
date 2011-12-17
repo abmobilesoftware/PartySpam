@@ -149,7 +149,7 @@ public class CreateEventActivity extends FragmentActivity {
 					.getInstance();;
 			BusinessLogic lBl = BusinessLogic.getInstance();
 			Party lNewParty = lNewEventRepository.getParty();
-			lBl.createEvent(lNewParty.getTitle());
+			lBl.createEvent(lNewParty);
 			
 			FragmentActivity lParentActivity = (FragmentActivity) mContext;
 			lParentActivity.setResult(RESULT_OK);
